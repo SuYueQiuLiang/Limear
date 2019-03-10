@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">线性规划</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">ViewBrink径涯工作室</string>
+    <string name="nav_header_subtitle">viewbrink@163.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">设置</string>
+    <string name="main">个人主页</string>
+    <string name="setting">设置</string>
+    <string name="history">历史追溯</string>
+    <string name="other">其他</string>
+    <string name="share">分享给朋友！</string>
+    <string name="about">关于</string>
+    <string name="note">今日备忘</string>
+</resources>

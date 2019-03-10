@@ -1,0 +1,1 @@
+include ':app', ':serversjava', ':myapplication', ':myapplication', ':myapplication2'
