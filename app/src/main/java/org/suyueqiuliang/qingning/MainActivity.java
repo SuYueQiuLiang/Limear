@@ -1,9 +1,10 @@
 package org.suyueqiuliang.qingning;
 
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.content.SharedPreferences;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -23,6 +24,14 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity
@@ -53,7 +62,7 @@ public class MainActivity extends AppCompatActivity
         mainfragment = new mainfragment();
         settingfragment = new settingfragment();
         historyfragment = new historyfragment();
-        fragmentManager = getFragmentManager();
+        fragmentManager = getSupportFragmentManager();
         transaction = fragmentManager.beginTransaction();
         transaction.add(R.id.right_layout, mainfragment);
         transaction.add(R.id.right_layout, settingfragment);
@@ -191,7 +200,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
     public void changefragment(Fragment frag){
-        fragmentManager = getFragmentManager();
+        fragmentManager = getSupportFragmentManager();
         transaction = fragmentManager.beginTransaction();
         transaction.hide(settingfragment);
         transaction.hide(mainfragment);
@@ -200,6 +209,35 @@ public class MainActivity extends AppCompatActivity
         transaction.commit();
     }
 
+
+
+    //将应用数据保存、读取，修改
+    public List<String> readdata(String text){
+        SharedPreferences.Editor editor = getSharedPreferences("lifeday", MODE_PRIVATE).edit();
+        //步骤2-2：将获取过来的值放入文件
+        editor.putString("code", text);
+        //步骤3：提交
+        editor.commit();
+        //步骤1：创建一个SharedPreferences接口对象
+        SharedPreferences read = getSharedPreferences("lifeday", MODE_PRIVATE);
+        //步骤2：获取文件中的值
+        String value = read.getString("code", "");
+        return null;
+    }
+
+
+    //分割从servers传来的数据
+    public List<String> cutstring(String s) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(s.getBytes(Charset.forName("utf8"))), Charset.forName("utf8")));
+        String line;
+        List<String> list=new ArrayList<String>();
+        while ((line = br.readLine()) != null) {
+            if (!line.trim().equals("")) {
+                list.add(line);
+            }
+        }
+        return list;
+    }
 
 
 //服务器参数
