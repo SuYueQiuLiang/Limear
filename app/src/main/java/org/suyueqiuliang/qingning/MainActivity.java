@@ -212,15 +212,12 @@ public class MainActivity extends AppCompatActivity
 
 
     //将应用数据保存、读取，修改
-    public List<String> readdata(String text){
+    public List<String> writedata(String text){
         SharedPreferences.Editor editor = getSharedPreferences("lifeday", MODE_PRIVATE).edit();
-        //步骤2-2：将获取过来的值放入文件
         editor.putString("code", text);
-        //步骤3：提交
         editor.commit();
         //步骤1：创建一个SharedPreferences接口对象
         SharedPreferences read = getSharedPreferences("lifeday", MODE_PRIVATE);
-        //步骤2：获取文件中的值
         String value = read.getString("code", "");
         return null;
     }
