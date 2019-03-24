@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity
     //务必在读取完message后重置message至null
     Boolean opened=false;
     String message;
+    Boolean logged=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +85,20 @@ public class MainActivity extends AppCompatActivity
             public void run() {
                 getdata(toolbar, "gettitle");
             }}).start();
+
+        //读取用户数据，如果不为空则尝试登陆
+        final String[] user=readuserdata();
+        if(!user[0].equals("")) {
+            new Thread(new Runnable() {
+                public void run() {
+                    if(getdata(toolbar, "logging\n"+user[0]+"\n"+user[1]).equals("true")){
+                        logged=true;
+                    }
+                    else
+                        logged=false;
+                }
+            }).start();
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle
@@ -212,14 +227,19 @@ public class MainActivity extends AppCompatActivity
 
 
     //将应用数据保存、读取，修改
-    public List<String> writedata(String text){
-        SharedPreferences.Editor editor = getSharedPreferences("lifeday", MODE_PRIVATE).edit();
-        editor.putString("code", text);
+    public void saveuserdata(String username,String userpassword){
+        SharedPreferences.Editor editor = getSharedPreferences("USER_DATA", MODE_PRIVATE).edit();
+        editor.putString("username", username);
+        editor.putString("userpassword",userpassword);
         editor.commit();
-        //步骤1：创建一个SharedPreferences接口对象
-        SharedPreferences read = getSharedPreferences("lifeday", MODE_PRIVATE);
-        String value = read.getString("code", "");
-        return null;
+    }
+    public String[] readuserdata(){
+        SharedPreferences read = getSharedPreferences("USER_DATA", MODE_PRIVATE);
+        String username = read.getString("username", "");
+        String userpassword = read.getString("userpassword", "");
+        String[] user;
+        user = new String[]{username,userpassword};
+        return user;
     }
 
 
@@ -245,7 +265,7 @@ public class MainActivity extends AppCompatActivity
         message=s.getData("222.212.239.135", data);
         if(message.equals("Failed")){
             Snackbar.make(v, "获取数据失败", Snackbar.LENGTH_SHORT)
-                    .setAction("撤销", new View.OnClickListener() {
+                    .setAction("收到", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
 

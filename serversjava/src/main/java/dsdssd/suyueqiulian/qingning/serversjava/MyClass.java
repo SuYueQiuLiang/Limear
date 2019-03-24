@@ -1,8 +1,10 @@
 package dsdssd.suyueqiulian.qingning.serversjava;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -55,7 +57,7 @@ public class MyClass {
                 ou.flush();
             }
             else if(ui.equals("logging")){
-                System.out.println("an user tried singing");
+                System.out.println("an user tried logging");
                 OutputStream ou = socket.getOutputStream();
                 String username = null;
                 String userpassword;
@@ -70,6 +72,25 @@ public class MyClass {
                 else
                     ou.write("false".getBytes("utf-8"));
                 ou.flush();
+            }
+            else if(ui.equals("register")){
+                System.out.println("an user tried register");
+                OutputStream ou = socket.getOutputStream();
+                String username = null;
+                String userpassword;
+                Boolean equal=false;
+                username=br.readLine();
+                userpassword=br.readLine();
+                File dir = new File("C:/limear/user/"+username+".txt");
+                if(dir.exists()){
+                    ou.write("false".getBytes("utf-8"));
+                    ou.flush();
+                }
+                else{
+                    writetext("C:/limear/user/"+username+".txt",userpassword);
+                    ou.write("true".getBytes("utf-8"));
+                    ou.flush();
+                }
             }
             br.close();
             socket.close();
@@ -108,7 +129,18 @@ public class MyClass {
         }finally {
             return str;
         }
+    }
 
+    public static void writetext(String road,String str){
+        try{
+            File file=new File(road);
+            FileWriter fw=new FileWriter(file);
+            BufferedWriter writer = new BufferedWriter(fw);
+            writer.write(str);
+            writer.close();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 }
 
