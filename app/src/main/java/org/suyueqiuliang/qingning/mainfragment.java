@@ -9,8 +9,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -21,6 +23,10 @@ public class mainfragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.mainfragment, container, false);
+        TextView dat=(TextView)view.findViewById(R.id.date);
+        Calendar calendar = Calendar.getInstance();
+        String day=toString().valueOf(calendar.get(Calendar.DAY_OF_MONTH));
+        dat.setText(day);
         List<String> list=new ArrayList<String>();
         List<Double> time=new ArrayList<Double>();
         List<Integer> date=new ArrayList<Integer>();

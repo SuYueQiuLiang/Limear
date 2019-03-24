@@ -1,6 +1,7 @@
 package org.suyueqiuliang.qingning;
 
 
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,6 +15,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
@@ -21,9 +23,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -31,6 +36,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 
@@ -48,13 +54,17 @@ public class MainActivity extends AppCompatActivity
     Boolean opened=false;
     String message;
     Boolean logged=false;
+    String serversip="39.108.254.228";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("2019年2月");
+        //获得时间
+        Calendar calendar = Calendar.getInstance();
+        String time= toString().valueOf(calendar.get(Calendar.YEAR))+"年"+toString().valueOf(calendar.get(Calendar.MONTH)+1)+"月";
+        toolbar.setTitle(time);
         toolbar.setTitleTextColor(Color.parseColor("#1f4921"));
         setSupportActionBar(toolbar);
 
@@ -99,6 +109,8 @@ public class MainActivity extends AppCompatActivity
                 }
             }).start();
         }
+
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle
@@ -156,6 +168,58 @@ public class MainActivity extends AppCompatActivity
             li3.topMargin = (int)(t2.getHeight() - fab.getHeight()*0.5);
             fab.setLayoutParams(li3);
 
+            ImageView userimage=(ImageView)findViewById(R.id.imageView) ;
+            userimage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View v) {
+                    final EditText editText1 = new EditText(MainActivity.this);
+                    editText1.setHint("用户名");
+                    final EditText editText2 = new EditText(MainActivity.this);
+                    editText2.setHint("密码");
+                    LinearLayout layout=new LinearLayout(getApplicationContext());
+                    layout.setOrientation(LinearLayout.VERTICAL);
+                    layout.addView(editText1);
+                    layout.addView(editText2);
+                    AlertDialog.Builder inputDialog =
+                            new AlertDialog.Builder(MainActivity.this);
+                    inputDialog.setTitle("登录").setView(layout);
+                    inputDialog.setNegativeButton("注册",new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            new Thread(new Runnable() {
+                                public void run() {
+                                    if(getdata(v, "register\n"+editText1.getText().toString()+"\n"+editText2.getText().toString()).equals("true")){
+                                        logged=true;
+                                        System.out.println("成功");
+                                    }
+                                    else {
+                                        logged = false;
+                                        System.out.println("失败");
+                                    }
+                                }
+                            }).start();
+                        }
+                        });
+                    inputDialog.setPositiveButton("确定",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    new Thread(new Runnable() {
+                                        public void run() {
+                                            if(getdata(v, "logging\n"+editText1.getText().toString()+"\n"+editText2.getText().toString()).equals("true")){
+                                                logged=true;
+                                                System.out.println("成功");
+                                            }
+                                            else {
+                                                logged = false;
+                                                System.out.println("失败");
+                                            }
+                                        }
+                                    }).start();
+                                }
+                            }).show();
+                }
+            });
         }
     }
 
@@ -262,7 +326,7 @@ public class MainActivity extends AppCompatActivity
 
         servers s=new servers();
         final String message;
-        message=s.getData("222.212.239.135", data);
+        message=s.getData(serversip, data);
         if(message.equals("Failed")){
             Snackbar.make(v, "获取数据失败", Snackbar.LENGTH_SHORT)
                     .setAction("收到", new View.OnClickListener() {
