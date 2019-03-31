@@ -11,4 +11,6 @@
     <color name="color6">#26a69a</color>
     <color name="color7">#ff5252</color>
     <color name="color8">#00b0ff</color>
+    <color name="colorDividers">#1F000000</color>
+    <color name="colorText38">#61000000</color>
 </resources>
