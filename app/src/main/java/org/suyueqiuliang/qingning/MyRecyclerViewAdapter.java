@@ -13,6 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 
@@ -31,11 +33,15 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         public final TextView title;
         public final TextView date;
         public final CardView cardview;
+        public final TextView endtime;
+        public final View cutoffline;
         public ViewHolder(View v) {
             super(v);
             title = (TextView) v.findViewById(R.id.text55);
             date=(TextView) v.findViewById(R.id.time);
             cardview=(CardView) v.findViewById(R.id.CardView);
+            cutoffline=(View) v.findViewById(R.id.cutoffline);
+            endtime=(TextView) v.findViewById(R.id.endtime);
         }
     }
 
@@ -66,19 +72,36 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             lp.setMargins(54*3, 0, 16*3, 0);
             holder.cardview.setLayoutParams(lp);
         }
-        test++;
-        holder.cardview.setCardBackgroundColor(Color.WHITE);
-        /*switch (stytle.get(position)){
-            case 0:
+        String t=enduptime.get(position);
+        if(t.equals("")){
+            holder.endtime.setVisibility(View.GONE);
+            holder.cutoffline.setVisibility(View.VISIBLE);
+        }else{
+            holder.endtime.setText(t);
+            holder.endtime.setVisibility(View.VISIBLE);
+            holder.cutoffline.setVisibility(View.GONE);
+        }
 
+        test++;
+        //holder.cardview.setCardBackgroundColor(Color.WHITE);
+        switch (stytle.get(position)){
+            case 0:
+                //考试活动
+                holder.cardview.setCardBackgroundColor(context.getColor(R.color.color5));
                 break;
             case 1:
-
+                //背诵活动
+                holder.cardview.setCardBackgroundColor(context.getColor(R.color.color6));
                 break;
             case 2:
-
+                //运动活动
+                holder.cardview.setCardBackgroundColor(context.getColor(R.color.color7));
                 break;
-        }*/
+            case 3:
+                //小测试活动
+                holder.cardview.setCardBackgroundColor(context.getColor(R.color.color8));
+                break;
+        }
 
     }
 

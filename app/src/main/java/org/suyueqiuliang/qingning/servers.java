@@ -19,12 +19,12 @@ public class servers {
                 try {
                     Socket socket;
                     // 创建Socket对象 & 指定服务端的IP及端口号
-                    System.out.println("dssd");
+                    System.out.println("Services began...");
                     socket = new Socket(ip, 1046);
                     OutputStream ou = socket.getOutputStream();
                     ou.write((data+"\n").getBytes("utf-8"));
                     ou.flush();
-                    System.out.println("getting the data");
+                    System.out.println("connected to services,try to get message...");
                     InputStream is = socket.getInputStream();
                     InputStreamReader isr = new InputStreamReader(is);
                     BufferedReader br = new BufferedReader(isr);
